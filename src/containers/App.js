@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person';
+import Cockpit from '../components/Cockpit/Cockpit';
+import Persons from '../components/Persons/Persons';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log('[App.js] constructor');
+  }
+
   state = {
     persons: [
       { id: '1', name: 'Max', age: 26 },
@@ -10,6 +16,15 @@ class App extends Component {
       { id: '3', name: 'Christian', age: 29 }
     ],
     showPersons: false
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    return state;
+  }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
   }
 
   nameChangedHandler = (event, id) => {
@@ -42,36 +57,21 @@ class App extends Component {
   }
 
   render() {
-    const style = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
+    console.log('[App.js] render');
 
     return (
       <div className="App">
-        <h1>Hello, world!</h1>
-        <p>This is working!</p>
-
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>
-          Toggle persons
-        </button>
+        <Cockpit
+          title={this.props.appTitle}
+          persons={this.state.persons}
+          showPersons={this.state.showPersons}
+          onToggle={this.togglePersonsHandler} />
 
         {this.state.showPersons && (
-          <div>
-            {this.state.persons.map(person => {
-              return <Person
-                key={person.id}
-                name={person.name}
-                age={person.age}
-                onClick={() => this.deletePersonHandler(person.id)}
-                onChange={(event) => this.nameChangedHandler(event, person.id)} />
-            })}
-          </div>
+          <Persons
+            list={this.state.persons}
+            onDelete={this.deletePersonHandler}
+            onChange={this.nameChangedHandler} />
         )}
       </div>
     );

@@ -2,6 +2,8 @@ import React from 'react';
 import './Person.css';
 
 const Person = (props) => {
+	console.log('[Person.js] rendering...');
+
 	return (
 		<div
 			className="Person">
